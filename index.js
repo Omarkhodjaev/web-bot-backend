@@ -11,7 +11,21 @@ const bootstrap = () => {
     if (text === "/start") {
       await bot.sendMessage(
         chatId,
-        "Platformada mavjud kurslarni sotib olishingiz mumkin"
+        "Platformada mavjud kurslarni sotib olishingiz mumkin",
+        {
+          reply_markup: {
+            keyboard: [
+              [
+                {
+                  text: "Kurslarni ko'rish",
+                  web_app: {
+                    url: "https://web-bot-client.vercel.app",
+                  },
+                },
+              ],
+            ],
+          },
+        }
       );
     }
   });
