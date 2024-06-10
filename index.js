@@ -1,7 +1,14 @@
 const TelegramBot = require("node-telegram-bot-api");
+const express = require("express");
+const cors = require("cors");
+
 const token = "7356982966:AAFDedgzE5MsKCyQesxQVCF49WQWfXxrC4g";
 
 const bot = new TelegramBot(token, { polling: true });
+const app = express();
+
+app.use(express.json());
+app.use(cors());
 
 const bootstrap = () => {
   bot.setMyCommands([
@@ -86,3 +93,32 @@ const bootstrap = () => {
 };
 
 bootstrap();
+
+app.post("/web-data", async (req, res) => {
+  const { queryId, products } = req.body;
+
+  try {
+    await bot.answerWebAppQuery(queryId, {
+      type: "article",
+      id: queryId,
+      title: "Muvaffaqiyatli xarid qildingiz",
+      input_message_content: {
+        message_text: `Xaridingiz uchun tashakkur, siz jami${products
+          .reduce((a, c) => a + c.price * c.quantity, 0)
+          .toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          })} shuncha summadagi kurslarni sotib oldingiz. ${products
+          .map((c) => `${c.title} ${c.quantity}x`)
+          .join(", ")}`,
+      },
+    });
+    return res.status(200).json({});
+  } catch (error) {
+    return res.status(500).json({});
+  }
+});
+
+app.listen(process.env.PORT || 8000, () => {
+  console.log("Server is running");
+});
