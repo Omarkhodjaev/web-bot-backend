@@ -2,7 +2,8 @@ const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const cors = require("cors");
 
-const token = "7258802100:AAHQ8w4C7Q2erItu9VKRRwEsdxlp00b0HC4"; // for production
+// const token = "7258802100:AAHQ8w4C7Q2erItu9VKRRwEsdxlp00b0HC4"; // for production
+const token = "7028220149:AAGw6GJmj7F9CXk3oohScQgDB3Y0crVOl0M"; // for test
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
@@ -60,7 +61,7 @@ bot.on("message", async (msg) => {
       }
     );
   }
-
+  console.log(msg.web_app_data);
   if (msg.web_app_data?.data) {
     try {
       const data = JSON.parse(msg.web_app_data?.data);
